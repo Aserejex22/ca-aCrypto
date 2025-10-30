@@ -57,9 +57,6 @@ export const WalletProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const updateCurrentWalletState = async () => {
-    // There is no way, with StellarWalletsKit, to check if the wallet is
-    // installed/connected/authorized. We need to manage that on our side by
-    // checking our storage item.
     const walletId = storage.getItem("walletId");
     const walletNetwork = storage.getItem("walletNetwork");
     const walletAddr = storage.getItem("walletAddress");
@@ -82,9 +79,6 @@ export const WalletProvider = ({ children }: { children: React.ReactNode }) => {
       nullify();
     } else {
       if (popupLock.current) return;
-      // If our storage item is there, then we try to get the user's address &
-      // network from their wallet. Note: `getAddress` MAY open their wallet
-      // extension, depending on which wallet they select!
       try {
         popupLock.current = true;
         wallet.setWallet(walletId);
@@ -104,11 +98,7 @@ export const WalletProvider = ({ children }: { children: React.ReactNode }) => {
           updateState({ ...a, ...n });
         }
       } catch (e) {
-        // If `getNetwork` or `getAddress` throw errors... sign the user out???
         nullify();
-        // then log the error (instead of throwing) so we have visibility
-        // into the error while working on Scaffold Stellar but we do not
-        // crash the app process
         console.error(e);
       } finally {
         popupLock.current = false;
@@ -120,7 +110,6 @@ export const WalletProvider = ({ children }: { children: React.ReactNode }) => {
     let timer: NodeJS.Timeout;
     let isMounted = true;
 
-    // Create recursive polling function to check wallet state continuously
     const pollWalletState = async () => {
       if (!isMounted) return;
 
@@ -131,17 +120,14 @@ export const WalletProvider = ({ children }: { children: React.ReactNode }) => {
       }
     };
 
-    // Get the wallet address when the component is mounted for the first time
-    startTransition(async () => {
-      await updateCurrentWalletState();
-      // Start polling after initial state is loaded
-
-      if (isMounted) {
-        timer = setTimeout(() => void pollWalletState(), POLL_INTERVAL);
-      }
+    startTransition(() => {
+      void updateCurrentWalletState().then(() => {
+        if (isMounted) {
+          timer = setTimeout(() => void pollWalletState(), POLL_INTERVAL);
+        }
+      });
     });
 
-    // Clear the timeout and stop polling when the component unmounts
     return () => {
       isMounted = false;
       if (timer) clearTimeout(timer);

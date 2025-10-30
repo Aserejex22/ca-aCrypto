@@ -1,7 +1,6 @@
 import * as React from "react";
 import * as RechartsPrimitive from "recharts";
 
-// Simple chart utilities for CO2 platform
 function cn(...classes: (string | undefined | false)[]): string {
   return classes.filter(Boolean).join(' ');
 }
@@ -59,7 +58,6 @@ const ChartContainer = React.forwardRef<HTMLDivElement, ChartContainerProps>(
 );
 ChartContainer.displayName = "ChartContainer";
 
-// Simple tooltip component
 interface ChartTooltipProps {
   active?: boolean;
   payload?: any[];
@@ -108,7 +106,6 @@ ChartTooltip.displayName = "ChartTooltip";
 
 const ChartTooltipContent = ChartTooltip;
 
-// Simple legend component  
 interface ChartLegendProps {
   payload?: any[];
   verticalAlign?: "top" | "bottom";

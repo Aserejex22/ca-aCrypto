@@ -9,7 +9,6 @@ import { LoginScreen } from "./components/LoginScreen";
 import { DashboardScreen } from "./components/DashboardScreen";
 import { PurchaseScreen } from "./components/PurchaseScreen";
 
-// CO2 Platform App with Figma designs
 function CO2PlatformApp() {
   const [currentScreen, setCurrentScreen] = useState<'login' | 'dashboard' | 'purchase'>('login');
 

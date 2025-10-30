@@ -9,7 +9,7 @@ import { Horizon } from "@stellar/stellar-sdk";
 import { networkPassphrase, stellarNetwork } from "../contracts/util";
 
 const kit: StellarWalletsKit = new StellarWalletsKit({
-  network: networkPassphrase as WalletNetwork,
+  network: networkPassphrase as unknown as WalletNetwork,
   modules: sep43Modules(),
 });
 
@@ -20,11 +20,7 @@ export const connectWallet = async () => {
       const selectedId = option.id;
       kit.setWallet(selectedId);
 
-      // Now open selected wallet's login flow by calling `getAddress` --
-      // Yes, it's strange that a getter has a side effect of opening a modal
       void kit.getAddress().then((address) => {
-        // Once `getAddress` returns successfully, we know they actually
-        // connected the selected wallet, and we set our localStorage
         if (address.address) {
           storage.setItem("walletId", selectedId);
           storage.setItem("walletAddress", address.address);
@@ -70,7 +66,7 @@ function getHorizonHost(mode: string) {
 
 export const fetchBalance = async (address: string) => {
   const horizon = new Horizon.Server(getHorizonHost(stellarNetwork), {
-    allowHttp: stellarNetwork === "LOCAL",
+    allowHttp: false,
   });
 
   const { balances } = await horizon.accounts().accountId(address).call();

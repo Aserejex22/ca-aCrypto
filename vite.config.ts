@@ -4,7 +4,6 @@ import wasm from "vite-plugin-wasm";
 import { nodePolyfills } from "vite-plugin-node-polyfills";
 import path from "path";
 
-// https://vite.dev/config/
 export default defineConfig(() => {
   return {
     plugins: [

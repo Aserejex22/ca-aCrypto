@@ -1,7 +1,6 @@
 import * as React from "react";
 import * as SliderPrimitive from "@radix-ui/react-slider";
 
-// Simple utility function
 function cn(...classes: (string | undefined)[]): string {
   return classes.filter(Boolean).join(' ');
 }

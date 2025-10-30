@@ -1,7 +1,6 @@
 import * as React from "react";
 import * as ProgressPrimitive from "@radix-ui/react-progress";
 
-// Simple utility function
 function cn(...classes: (string | undefined)[]): string {
   return classes.filter(Boolean).join(' ');
 }
